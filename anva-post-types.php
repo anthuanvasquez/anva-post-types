@@ -57,11 +57,6 @@ include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/gallery-post-type.php' );
 // include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-sliders-post-type.php' );
 // include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-portfolio-post-type.php' );
 
-add_action( 'init', 'anva_gallery_register' );
-add_action( 'init', 'anva_gallery_taxonomy' );
-add_action( 'manage_galleries_posts_custom_column', 'anva_gallery_add_columns', 10, 2 );
-add_filter( 'manage_edit-galleries_columns', 'anva_gallery_columns' );
-
 /**
  * Clear the permalinks
  *

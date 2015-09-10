@@ -1,5 +1,10 @@
 <?php
 
+add_action( 'init', 'anva_gallery_register' );
+add_action( 'init', 'anva_gallery_taxonomy' );
+add_action( 'manage_galleries_posts_custom_column', 'anva_gallery_add_columns', 10, 2 );
+add_filter( 'manage_edit-galleries_columns', 'anva_gallery_columns' );
+
 /**
  * Add columns to post type admin
  * 
