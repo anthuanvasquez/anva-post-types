@@ -53,9 +53,10 @@ function anva_get_post_types() {
  *
  * @since 1.0.0
  */
-include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/gallery-post-type.php' );
-// include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-sliders-post-type.php' );
-// include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-portfolio-post-type.php' );
+include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/portfolio-post-type.php' );
+include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/gallery-post-type.php' 	 );
+include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/slideshow-post-type.php' );
+
 
 /**
  * Clear the permalinks
@@ -64,6 +65,8 @@ include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/gallery-post-type.php' );
  */
 function anva_post_types_rules() {
 	anva_gallery_register();
+	anva_slideshow_register();
+	anva_portfolio_register();
 	flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'anva_post_types_rules' );
