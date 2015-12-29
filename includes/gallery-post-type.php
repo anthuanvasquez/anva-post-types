@@ -55,7 +55,7 @@ function anva_gallery_columns( $columns ) {
 		'cb'    			=> '<input type="checkbox" />',
 		'image' 			=> __( 'Featured Image', 'anva' ),
 		'title' 			=> __( 'Title', 'anva' ),
-		'gallery_cat' => __( 'Groups' ),
+		'gallery_cat' => __( 'Categories' ),
 		'date'  			=> __( 'Date', 'anva' )
 	);
 
