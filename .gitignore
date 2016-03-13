@@ -1,1 +1,16 @@
+._*
+.Trashes
 .DS_Store
+.sass-cache
+.html
+.txt
+*.css.map
+*.js.map
+*.log
+.htaccess
+Thumbs.db
+Desktop.ini
+
+/node_modules
+/readme.html
+/license.txt
