@@ -73,12 +73,12 @@ function anva_portfolio_add_columns( $column, $post_id ) {
 function anva_portfolio_columns( $columns ) {
 
 	$columns = array(
-		'cb'    						=> '<input type="checkbox" />',
-		'image' 						=> __( 'Featured Image', 'anva' ),
-		'title' 						=> __( 'Title', 'anva' ),
-		'portfolio_type' 		=> __( 'Types' ),
+		'cb'    			=> '<input type="checkbox" />',
+		'image' 			=> __( 'Featured Image', 'anva' ),
+		'title' 			=> __( 'Title', 'anva' ),
+		'portfolio_type' 	=> __( 'Types' ),
 		'portfolio_skill' 	=> __( 'Skills' ),
-		'date'  						=> __( 'Date', 'anva' )
+		'date'  			=> __( 'Date', 'anva' )
 	);
 
 	return $columns;
@@ -92,23 +92,23 @@ function anva_portfolio_columns( $columns ) {
 function anva_portfolio_register() {
 
 	$labels = array(
-		'name'               	 => __( 'Portfolio',                   			'anva' ),
-		'singular_name'      	 => __( 'Portfolio',                    		'anva' ),
-		'menu_name'          	 => __( 'Portfolio',                   			'anva' ),
-		'name_admin_bar'     	 => __( 'Portfolio',                    		'anva' ),
-		'add_new'            	 => __( 'Add New',                     			'anva' ),
-		'add_new_item'       	 => __( 'Add New Item',            					'anva' ),
-		'edit_item'          	 => __( 'Edit Item',               					'anva' ),
-		'new_item'           	 => __( 'New Item',                					'anva' ),
-		'view_item'          	 => __( 'View Item',               					'anva' ),
+		'name'               	 => __( 'Portfolio',                   		'anva' ),
+		'singular_name'      	 => __( 'Portfolio',                    	'anva' ),
+		'menu_name'          	 => __( 'Portfolio',                   		'anva' ),
+		'name_admin_bar'     	 => __( 'Portfolio',                    	'anva' ),
+		'add_new'            	 => __( 'Add New',                     		'anva' ),
+		'add_new_item'       	 => __( 'Add New Item',            			'anva' ),
+		'edit_item'          	 => __( 'Edit Item',               			'anva' ),
+		'new_item'           	 => __( 'New Item',                			'anva' ),
+		'view_item'          	 => __( 'View Item',               			'anva' ),
 		'search_items'       	 => __( 'Search portfolio items',           'anva' ),
 		'not_found'          	 => __( 'No portfolio item found',          'anva' ),
 		'not_found_in_trash' 	 => __( 'No portfolio item found in trash', 'anva' ),
-		'all_items'          	 => __( 'All Items',               					'anva' ),
+		'all_items'          	 => __( 'All Items',               			'anva' ),
 	);
 
 	$args = array(
-		'labels'							 => $labels,
+		'labels'			   => $labels,
 		'description'          => '',
 		'public'               => true,
 		'publicly_queryable'   => true,
@@ -124,14 +124,14 @@ function anva_portfolio_register() {
 		'hierarchical'         => false,
 		'has_archive'          => 'portfolio',
 		'query_var'            => 'portfolio',
-		'rewrite' 						 => array(
-			'slug'       			 	 => 'portfolio',
-			'with_front' 			 	 => false,
-			'pages'      			 	 => true,
-			'feeds'      			 	 => true,
-			'ep_mask'    			 	 => EP_PERMALINK,
+		'rewrite' 			   => array(
+			'slug'       	   => 'portfolio',
+			'with_front' 	   => false,
+			'pages'      	   => true,
+			'feeds'      	   => true,
+			'ep_mask'    	   => EP_PERMALINK,
 		),
-		'supports' 						 => array( 'title', 'editor', 'thumbnail' ),
+		'supports' 			   => array( 'title', 'editor', 'thumbnail' ),
 	);
 
 	register_post_type( 'portfolio', $args );
@@ -146,11 +146,11 @@ function anva_portfolio_register() {
 function anva_portfolio_taxonomy() {
 
 	$type_labels = array(
-		'name'                => __( 'Portfolio Types', 		'anva' ),
-		'singular_name'       => __( 'Portfolio Type',   		'anva' ),
+		'name'                => __( 'Portfolio Types', 	'anva' ),
+		'singular_name'       => __( 'Portfolio Type',   	'anva' ),
 		'menu_name'           => __( 'Types',             	'anva' ),
 		'name_admin_bar'      => __( 'Type',               	'anva' ),
-		'search_items'        => __( 'Search Type',      		'anva' ),
+		'search_items'        => __( 'Search Type',      	'anva' ),
 		'popular_items'       => __( 'Popular Types',     	'anva' ),
 		'all_items'           => __( 'All Types',         	'anva' ),
 		'edit_item'           => __( 'Edit Type',          	'anva' ),
@@ -165,7 +165,7 @@ function anva_portfolio_taxonomy() {
 	);
 
 	$type_args = array(
-		'labels'							=> $type_labels,		
+		'labels'				=> $type_labels,		
 		'public'            	=> false,
 		'show_ui'           	=> true,
 		'show_in_nav_menus' 	=> true,
@@ -201,7 +201,7 @@ function anva_portfolio_taxonomy() {
 	);
 
 	$skill_args = array(
-		'labels'							=> $skill_labels,		
+		'labels'				=> $skill_labels,		
 		'public'            	=> false,
 		'show_ui'           	=> true,
 		'show_in_nav_menus' 	=> true,

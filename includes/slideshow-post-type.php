@@ -119,7 +119,7 @@ function anva_slideshow_register() {
 		'publicly_queryable'   => false,
 		'show_in_nav_menus'    => false,
 		'show_in_admin_bar'    => true,
-		'exclude_from_search'  => false,
+		'exclude_from_search'  => true,
 		'show_ui'              => true,
 		'show_in_menu'         => true,
 		'menu_position'        => 20,
@@ -163,10 +163,10 @@ function anva_slideshow_taxonomy() {
 	);
 
 	$args = array(
-		'labels'							=> $labels,		
+		'labels'				=> $labels,	
 		'public'            	=> false,
 		'show_ui'           	=> true,
-		'show_in_nav_menus' 	=> true,
+		'show_in_nav_menus' 	=> false,
 		'show_tagcloud'     	=> true,
 		'show_admin_column' 	=> true,
 		'hierarchical'      	=> true,

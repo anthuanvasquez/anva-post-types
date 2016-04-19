@@ -3,11 +3,11 @@
 Plugin Name: Anva Post Types
 Description: This plugin works in conjuction with the Anva Framework to create Custom Post Types for use with the framework to generate content.
 Version: 1.0.0
-Author: Anthuan Vasquez
+Author: Anthuan Vásquez
 Author URI: http://anthuanvasquez.net
 License: GPL2
 
-	Copyright 2015  Anva Framework
+	Copyright 2016  Anva Framework
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License version 2,
@@ -42,8 +42,8 @@ define( 'ANVA_POST_TYPES_PLUGIN_URI', plugins_url( '' , __FILE__ ) );
 function anva_get_post_types() {
 	$post_types = array(
 		'galleries',
+		'portfolio',
 		'slideshows',
-		'portfolio'
 	);
 	return $post_types;
 }
