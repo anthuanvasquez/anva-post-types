@@ -30,43 +30,43 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// Constants
 define( 'ANVA_POST_TYPES_PLUGIN_VERSION', '1.0.0' );
 define( 'ANVA_POST_TYPES_PLUGIN_DIR', dirname( __FILE__ ) );
 define( 'ANVA_POST_TYPES_PLUGIN_URI', plugins_url( '' , __FILE__ ) );
 
 /**
- * Get Custom Post Types
- *
+ * Init post types plugin.
+ * 
  * @since 1.0.0
  */
-function anva_get_post_types() {
-	$post_types = array(
-		'galleries',
-		'portfolio',
-		'slideshows',
-	);
-	return $post_types;
+function anva_post_types_init() {
+
+	// Include helpers
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/helpers.php' );
+
+	// Error handling
+	$notices = Anva_Post_Types_Notices::get_instance();
+
+	// Stop plugin from running
+	if ( $notices->do_stop() ) {
+		return;
+	}
+	
+	// Include post types
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/portfolio-post-type.php' );	
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/gallery-post-type.php'   );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/slideshow-post-type.php' );
+	
 }
+add_action( 'after_setup_theme', 'anva_post_types_init' );
 
 /**
- * Run Post Types
- *
- * @since 1.0.0
- */
-include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/portfolio-post-type.php' );
-include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/gallery-post-type.php' 	 );
-include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/slideshow-post-type.php' );
-
-
-/**
- * Clear the permalinks
+ * Clear the permalinks.
  *
  * @since  1.0.0
  */
 function anva_post_types_rules() {
-	anva_gallery_register();
-	anva_slideshow_register();
-	anva_portfolio_register();
 	flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'anva_post_types_rules' );
