@@ -1,1 +1,9 @@
+._*
+.Trashes
 .DS_Store
+.sass-cache
+*.css.map
+*.js.map
+*.log
+Thumbs.db
+Desktop.ini
