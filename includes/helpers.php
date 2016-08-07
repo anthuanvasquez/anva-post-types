@@ -2,8 +2,8 @@
 /**
  * Display plugin notices to the user.
  */
-class Anva_Post_Types_Notices {
-
+class Anva_Post_Types_Notices
+{
     /**
      * A single instance of this class.
      *
@@ -31,8 +31,8 @@ class Anva_Post_Types_Notices {
      * @since 1.0.0
      * @return A single instance of this class.
      */
-    public static function get_instance() {
-
+    public static function get_instance()
+    {
         if ( self::$instance == null ) {
             self::$instance = new self;
         }
@@ -45,8 +45,8 @@ class Anva_Post_Types_Notices {
      *
      * @since 1.0.0
      */
-    private function __construct() {
-
+    private function __construct()
+    {
         $v = 0;
 
         if ( defined( 'ANVA_FRAMEWORK_VERSION' ) ) {
@@ -70,8 +70,8 @@ class Anva_Post_Types_Notices {
      *
      * @since 1.0.0
      */
-    public function show() {
-
+    public function show()
+    {
         global $current_user;
 
         if ( $this->error ) {
@@ -99,8 +99,8 @@ class Anva_Post_Types_Notices {
      *
      * @since 1.0.0
      */
-    public function disable() {
-
+    public function disable()
+    {
         global $current_user;
 
         if ( ! isset($_GET['nag-ignore']) ) {
@@ -121,8 +121,8 @@ class Anva_Post_Types_Notices {
      *
      * @since 1.0.0
      */
-    private function disable_url( $id ) {
-
+    private function disable_url( $id )
+    {
         global $pagenow;
 
         $url = admin_url( $pagenow );
@@ -143,12 +143,12 @@ class Anva_Post_Types_Notices {
      *
      * @since 1.0.0
      */
-    private function get_message( $type ) {
-
+    private function get_message( $type )
+    {
         $message = '';
 
         $messages = array(
-            'framework' => __('You are not using a theme with the Anva Framework, and so this plugin will not do anything.', 'anva-post-type'),
+            'framework' => __('You are not using a theme with the Anva Framework, and so this plugin will not do anything.', 'anva-post-types'),
         );
 
         if ( isset( $messages[$type] ) ) {
@@ -163,7 +163,8 @@ class Anva_Post_Types_Notices {
      *
      * @since 1.0.0
      */
-    public function do_stop() {
+    public function do_stop()
+    {
         return $this->stop;
     }
 

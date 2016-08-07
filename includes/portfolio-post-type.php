@@ -1,220 +1,275 @@
 <?php
 
-add_action( 'init', 'anva_portfolio_register' );
-add_action( 'init', 'anva_portfolio_taxonomy' );
-add_action( 'manage_portfolio_posts_custom_column', 'anva_portfolio_add_columns', 10, 2 );
-add_filter( 'manage_edit-portfolio_columns', 'anva_portfolio_columns' );
+class Anva_Post_Types_Portfolio
+{
+	/**
+     * A single instance of this class.
+     *
+     * @since 1.0.0
+     */
+    private static $instance = NULL;
 
-/**
- * Add columns to post type admin
- * 
- * @since 1.0.0
- */
-function anva_portfolio_add_columns( $column, $post_id ) {
+    /**
+     * Post type slug.
+     *
+     * @since  1.0.0
+     * @var string
+     */
+	private $post_type  = 'portfolio';
 
-	global $post;
+	/**
+	 * Taxonomies slug.
+	 * 
+	 * @var array
+	 */
+	private $taxonomies = array( 'portfolio_type', 'portfolio_skill' );
+
+	/**
+     * Creates or returns an instance of this class.
+     *
+     * @since 1.0.0
+     * @return A single instance of this class.
+     */
+    public static function get_instance()
+    {
+        if ( self::$instance == NULL ) {
+            self::$instance = new self;
+        }
+
+        return self::$instance;
+    }
 	
-	switch ( $column ) {
-		case 'image':
-			$edit_link = get_edit_post_link( $post->ID );
-			echo '<a href="' . esc_url( $edit_link ) . '" title="' . esc_attr( $post->post_title ) . '">' . get_the_post_thumbnail( $post->ID, 'thumbnail', array( 'alt' => $post->post_title  )  ) . '</a>';
-			break;
+	private function __construct()
+	{
+		$post_type_used = unserialize( ANVA_POST_TYPES_USED );
 
-		case 'portfolio_type':
-			$terms = get_the_terms( $post->ID, 'portfolio_type' );
+		if ( in_array( $this->post_type, $post_type_used ) ) {
+			add_action( 'init', array( $this, 'register' ) );
+			add_action( 'init', array( $this, 'taxonomy' ) );
+			add_action( 'manage_' . $this->post_type . '_posts_custom_column', array( $this, 'add_columns' ), 10, 2 );
+			add_filter( 'manage_edit-' . $this->post_type . '_columns', array( $this, 'columns' ) );
+		}
+		
+	}
 
-			if ( ! empty( $terms ) ) {
+	/**
+	 * Add columns to post type admin
+	 * 
+	 * @since 1.0.0
+	 */
+	public function add_columns( $column, $post_id )
+	{	
+		switch ( $column ) {
+			
+			case 'image':
+				
+				$post = get_post( $post_id );
+				$post_title = $post->post_title;
+				$edit_link = get_edit_post_link( $post->ID );
 
-				$output = array();
+				echo '<a href="' . esc_url( $edit_link ) . '" title="' . esc_attr( $post_title ) . '">' . get_the_post_thumbnail( $post->ID, 'thumbnail', array( 'alt' => $post_title  )  ) . '</a>';
+				
+				break;
 
-				foreach ( $terms as $term ) {
-					$output[] = sprintf( '<a href="%s">%s</a>',
-						esc_url( add_query_arg( array( 'post_type' => 'portfolio', 'portfolio_type' => $term->slug ), 'edit.php' ) ),
-						esc_html( sanitize_term_field( 'name', $term->name, $term->term_id, 'portfolio_type', 'display' ) )
-					);
+			case 'portfolio_type':
+				
+				$terms = get_the_terms( $post_id, $this->taxonomies[0] );
+
+				if ( ! empty( $terms ) ) {
+
+					$output = array();
+
+					foreach ( $terms as $term ) {
+						$output[] = sprintf( '<a href="%s">%s</a>',
+							esc_url( add_query_arg( array( 'post_type' => $this->post_type, $this->taxonomies[0] => $term->slug ), 'edit.php' ) ),
+							esc_html( sanitize_term_field( 'name', $term->name, $term->term_id, $this->taxonomies[0], 'display' ) )
+						);
+					}
+
+					echo join( ', ', $output );
+				} else {
+					_e( 'No Types', 'anva-post-types' );
 				}
 
-				echo join( ', ', $output );
-			} else {
-				_e( 'No Types', 'anva' );
-			}
-
-			break;
+				break;
 
 			case 'portfolio_skill':
-			$terms = get_the_terms( $post->ID, 'portfolio_skill' );
+				$terms = get_the_terms( $post_id, $this->taxonomies[1] );
 
-			if ( ! empty( $terms ) ) {
+				if ( ! empty( $terms ) ) {
 
-				$output = array();
+					$output = array();
 
-				foreach ( $terms as $term ) {
-					$output[] = sprintf( '<a href="%s">%s</a>',
-						esc_url( add_query_arg( array( 'post_type' => 'portfolio', 'portfolio_skill' => $term->slug ), 'edit.php' ) ),
-						esc_html( sanitize_term_field( 'name', $term->name, $term->term_id, 'portfolio_type', 'display' ) )
-					);
+					foreach ( $terms as $term ) {
+						$output[] = sprintf( '<a href="%s">%s</a>',
+							esc_url( add_query_arg( array( 'post_type' => $this->post_type, $this->post_type => $term->slug ), 'edit.php' ) ),
+							esc_html( sanitize_term_field( 'name', $term->name, $term->term_id, $this->post_type, 'display' ) )
+						);
+					}
+
+					echo join( ', ', $output );
+				} else {
+					_e( 'No Skills', 'anva-post-types' );
 				}
 
-				echo join( ', ', $output );
-			} else {
-				_e( 'No Skills', 'anva' );
-			}
-
-			break;
+				break;
+		}
+		
 	}
-	
-}
 
-/**
- * Create columns for post type admin
- * 
- * @since 1.0.0
- */
-function anva_portfolio_columns( $columns ) {
+	/**
+	 * Create columns for post type admin
+	 * 
+	 * @since 1.0.0
+	 */
+	public function columns( $columns )
+	{
+		$columns = array(
+			'cb'    			=> '<input type="checkbox" />',
+			'image' 			=> __( 'Featured Image', 'anva-post-types' ),
+			'title' 			=> __( 'Title', 'anva-post-types' ),
+			'portfolio_type' 	=> __( 'Types' ),
+			'portfolio_skill' 	=> __( 'Skills' ),
+			'date'  			=> __( 'Date', 'anva-post-types' )
+		);
 
-	$columns = array(
-		'cb'    			=> '<input type="checkbox" />',
-		'image' 			=> __( 'Featured Image', 'anva' ),
-		'title' 			=> __( 'Title', 'anva' ),
-		'portfolio_type' 	=> __( 'Types' ),
-		'portfolio_skill' 	=> __( 'Skills' ),
-		'date'  			=> __( 'Date', 'anva' )
-	);
+		return $columns;
+	}
 
-	return $columns;
-}
+	/**
+	 * Register post type
+	 * 
+	 * @since 1.0.0
+	 */
+	function register()
+	{
+		$labels = array(
+			'name'               => __( 'Portfolio',                   		'anva-post-types' ),
+			'singular_name'      => __( 'Portfolio',                    	'anva-post-types' ),
+			'menu_name'          => __( 'Portfolio',                   		'anva-post-types' ),
+			'name_admin_bar'     => __( 'Portfolio',                    	'anva-post-types' ),
+			'add_new'            => __( 'Add New',                     		'anva-post-types' ),
+			'add_new_item'       => __( 'Add New Item',            			'anva-post-types' ),
+			'edit_item'          => __( 'Edit Item',               			'anva-post-types' ),
+			'new_item'           => __( 'New Item',                			'anva-post-types' ),
+			'view_item'          => __( 'View Item',               			'anva-post-types' ),
+			'search_items'       => __( 'Search portfolio items',           'anva-post-types' ),
+			'not_found'          => __( 'No portfolio item found',          'anva-post-types' ),
+			'not_found_in_trash' => __( 'No portfolio item found in trash', 'anva-post-types' ),
+			'all_items'          => __( 'All Items',               			'anva-post-types' ),
+		);
 
-/**
- * Register post type
- * 
- * @since 1.0.0
- */
-function anva_portfolio_register() {
+		$args = array(
+			'labels'              => $labels,
+			'description'         => '',
+			'public'              => true,
+			'publicly_queryable'  => true,
+			'show_in_nav_menus'   => false,
+			'show_in_admin_bar'   => true,
+			'exclude_from_search' => false,
+			'show_ui'             => true,
+			'show_in_menu'        => true,
+			'menu_position'       => 20,
+			'menu_icon'           => 'dashicons-portfolio',
+			'can_export'          => true,
+			'delete_with_user'    => false,
+			'hierarchical'        => false,
+			'has_archive'         => 'portfolio',
+			'query_var'           => 'portfolio',
+			'rewrite'             => array(
+				'slug'       	  => 'portfolio',
+				'with_front' 	  => false,
+				'pages'      	  => true,
+				'feeds'      	  => true,
+				'ep_mask'    	  => EP_PERMALINK,
+			),
+			'supports' 			  => array( 'title', 'editor', 'thumbnail' ),
+		);
 
-	$labels = array(
-		'name'               	 => __( 'Portfolio',                   		'anva' ),
-		'singular_name'      	 => __( 'Portfolio',                    	'anva' ),
-		'menu_name'          	 => __( 'Portfolio',                   		'anva' ),
-		'name_admin_bar'     	 => __( 'Portfolio',                    	'anva' ),
-		'add_new'            	 => __( 'Add New',                     		'anva' ),
-		'add_new_item'       	 => __( 'Add New Item',            			'anva' ),
-		'edit_item'          	 => __( 'Edit Item',               			'anva' ),
-		'new_item'           	 => __( 'New Item',                			'anva' ),
-		'view_item'          	 => __( 'View Item',               			'anva' ),
-		'search_items'       	 => __( 'Search portfolio items',           'anva' ),
-		'not_found'          	 => __( 'No portfolio item found',          'anva' ),
-		'not_found_in_trash' 	 => __( 'No portfolio item found in trash', 'anva' ),
-		'all_items'          	 => __( 'All Items',               			'anva' ),
-	);
+		register_post_type( $this->post_type, $args );
 
-	$args = array(
-		'labels'			   => $labels,
-		'description'          => '',
-		'public'               => true,
-		'publicly_queryable'   => true,
-		'show_in_nav_menus'    => false,
-		'show_in_admin_bar'    => true,
-		'exclude_from_search'  => false,
-		'show_ui'              => true,
-		'show_in_menu'         => true,
-		'menu_position'        => 20,
-		'menu_icon'            => 'dashicons-portfolio',
-		'can_export'           => true,
-		'delete_with_user'     => false,
-		'hierarchical'         => false,
-		'has_archive'          => 'portfolio',
-		'query_var'            => 'portfolio',
-		'rewrite' 			   => array(
-			'slug'       	   => 'portfolio',
-			'with_front' 	   => false,
-			'pages'      	   => true,
-			'feeds'      	   => true,
-			'ep_mask'    	   => EP_PERMALINK,
-		),
-		'supports' 			   => array( 'title', 'editor', 'thumbnail' ),
-	);
+	}
 
-	register_post_type( 'portfolio', $args );
+	/**
+	 * Register taxonomy
+	 * 
+	 * @since 1.0.0
+	 */
+	function taxonomy()
+	{
 
-}
+		$type_labels = array(
+			'name'                => __( 'Portfolio Types', 	'anva-post-types' ),
+			'singular_name'       => __( 'Portfolio Type',   	'anva-post-types' ),
+			'menu_name'           => __( 'Types',             	'anva-post-types' ),
+			'name_admin_bar'      => __( 'Type',               	'anva-post-types' ),
+			'search_items'        => __( 'Search Type',      	'anva-post-types' ),
+			'popular_items'       => __( 'Popular Types',     	'anva-post-types' ),
+			'all_items'           => __( 'All Types',         	'anva-post-types' ),
+			'edit_item'           => __( 'Edit Type',          	'anva-post-types' ),
+			'view_item'           => __( 'View Type',          	'anva-post-types' ),
+			'update_item'         => __( 'Update Type',        	'anva-post-types' ),
+			'add_new_item'        => __( 'Add New Type',       	'anva-post-types' ),
+			'new_item_name'       => __( 'New Type Name',      	'anva-post-types' ),
+			'parent_item'         => __( 'Parent Type',        	'anva-post-types' ),
+			'parent_item_colon'   => __( 'Parent Type:',       	'anva-post-types' ),
+			'add_or_remove_items' => NULL,
+			'not_found'           => NULL,
+		);
 
-/**
- * Register taxonomy
- * 
- * @since 1.0.0
- */
-function anva_portfolio_taxonomy() {
+		$type_args = array(
+			'labels'				=> $type_labels,		
+			'public'            	=> false,
+			'show_ui'           	=> true,
+			'show_in_nav_menus' 	=> true,
+			'show_tagcloud'     	=> true,
+			'show_admin_column' 	=> true,
+			'hierarchical'      	=> true,
+			'query_var'         	=> 'portfolio_type',
+		);
+			
+		register_taxonomy(
+			$this->taxonomies[0],
+			$this->post_type,
+			$type_args
+		);
 
-	$type_labels = array(
-		'name'                => __( 'Portfolio Types', 	'anva' ),
-		'singular_name'       => __( 'Portfolio Type',   	'anva' ),
-		'menu_name'           => __( 'Types',             	'anva' ),
-		'name_admin_bar'      => __( 'Type',               	'anva' ),
-		'search_items'        => __( 'Search Type',      	'anva' ),
-		'popular_items'       => __( 'Popular Types',     	'anva' ),
-		'all_items'           => __( 'All Types',         	'anva' ),
-		'edit_item'           => __( 'Edit Type',          	'anva' ),
-		'view_item'           => __( 'View Type',          	'anva' ),
-		'update_item'         => __( 'Update Type',        	'anva' ),
-		'add_new_item'        => __( 'Add New Type',       	'anva' ),
-		'new_item_name'       => __( 'New Type Name',      	'anva' ),
-		'parent_item'         => __( 'Parent Type',        	'anva' ),
-		'parent_item_colon'   => __( 'Parent Type:',       	'anva' ),
-		'add_or_remove_items' => null,
-		'not_found'           => null,
-	);
+		$skill_labels = array(
+			'name'                => __( 'Portfolio Skills', 		'anva-post-types' ),
+			'singular_name'       => __( 'Portfolio Skill',   		'anva-post-types' ),
+			'menu_name'           => __( 'Skills',             		'anva-post-types' ),
+			'name_admin_bar'      => __( 'Skill',               	'anva-post-types' ),
+			'search_items'        => __( 'Search Skill',      		'anva-post-types' ),
+			'popular_items'       => __( 'Popular Skills',     		'anva-post-types' ),
+			'all_items'           => __( 'All Skills',         		'anva-post-types' ),
+			'edit_item'           => __( 'Edit Skill',          	'anva-post-types' ),
+			'view_item'           => __( 'View Skill',          	'anva-post-types' ),
+			'update_item'         => __( 'Update Skill',        	'anva-post-types' ),
+			'add_new_item'        => __( 'Add New Skill',       	'anva-post-types' ),
+			'new_item_name'       => __( 'New Skill Name',      	'anva-post-types' ),
+			'parent_item'         => __( 'Parent Skill',        	'anva-post-types' ),
+			'parent_item_colon'   => __( 'Parent Skill:',       	'anva-post-types' ),
+			'add_or_remove_items' => NULL,
+			'not_found'           => NULL,
+		);
 
-	$type_args = array(
-		'labels'				=> $type_labels,		
-		'public'            	=> false,
-		'show_ui'           	=> true,
-		'show_in_nav_menus' 	=> true,
-		'show_tagcloud'     	=> true,
-		'show_admin_column' 	=> true,
-		'hierarchical'      	=> true,
-		'query_var'         	=> 'portfolio_type',
-	);
+		$skill_args = array(
+			'labels'				=> $skill_labels,		
+			'public'            	=> false,
+			'show_ui'           	=> true,
+			'show_in_nav_menus' 	=> true,
+			'show_tagcloud'     	=> true,
+			'show_admin_column' 	=> true,
+			'hierarchical'      	=> false,
+			'query_var'         	=> 'portfolio_skill',
+		);
 		
-	register_taxonomy(
-		'portfolio_type',
-		'portfolio',
-		$type_args
-	);
+		register_taxonomy(
+			$this->taxonomies[1],
+			$this->post_type,
+			$skill_args
+		);
 
-	$skill_labels = array(
-		'name'                => __( 'Portfolio Skills', 			'anva' ),
-		'singular_name'       => __( 'Portfolio Skill',   		'anva' ),
-		'menu_name'           => __( 'Skills',             		'anva' ),
-		'name_admin_bar'      => __( 'Skill',               	'anva' ),
-		'search_items'        => __( 'Search Skill',      		'anva' ),
-		'popular_items'       => __( 'Popular Skills',     		'anva' ),
-		'all_items'           => __( 'All Skills',         		'anva' ),
-		'edit_item'           => __( 'Edit Skill',          	'anva' ),
-		'view_item'           => __( 'View Skill',          	'anva' ),
-		'update_item'         => __( 'Update Skill',        	'anva' ),
-		'add_new_item'        => __( 'Add New Skill',       	'anva' ),
-		'new_item_name'       => __( 'New Skill Name',      	'anva' ),
-		'parent_item'         => __( 'Parent Skill',        	'anva' ),
-		'parent_item_colon'   => __( 'Parent Skill:',       	'anva' ),
-		'add_or_remove_items' => null,
-		'not_found'           => null,
-	);
-
-	$skill_args = array(
-		'labels'				=> $skill_labels,		
-		'public'            	=> false,
-		'show_ui'           	=> true,
-		'show_in_nav_menus' 	=> true,
-		'show_tagcloud'     	=> true,
-		'show_admin_column' 	=> true,
-		'hierarchical'      	=> false,
-		'query_var'         	=> 'portfolio_skill',
-	);
-		
-	register_taxonomy(
-		'portfolio_skill',
-		'portfolio',
-		$skill_args
-	);
+	}
 
 }
