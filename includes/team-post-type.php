@@ -1,6 +1,6 @@
 <?php
 
-class Anva_Post_Types_Gallery
+class Anva_Post_Types_Team
 {
 	/**
      * A single instance of this class.
@@ -14,14 +14,14 @@ class Anva_Post_Types_Gallery
 	 * 
 	 * @var string
 	 */
-	private $post_type = 'galleries';
+	private $post_type = 'team';
 
 	/**
 	 * Taxonomy slug.
 	 * 
 	 * @var string
 	 */
-	private $taxonomy = 'gallery_cat';
+	private $taxonomy = 'team_cat';
 
 	/**
      * Creates or returns an instance of this class.
@@ -71,7 +71,7 @@ class Anva_Post_Types_Gallery
 				
 				break;
 
-			case 'gallery_cat':
+			case 'team_cat':
 
 				$terms = get_the_terms( $post_id, $this->taxonomy );
 
@@ -88,7 +88,7 @@ class Anva_Post_Types_Gallery
 
 					echo join( ', ', $output );
 				} else {
-					_e( 'No Gallery Categories', 'anva-post-types' );
+					_e( 'No Team Positions', 'anva-post-types' );
 				}
 
 				break;
@@ -106,11 +106,11 @@ class Anva_Post_Types_Gallery
 	public function columns( $columns )
 	{
 		$columns = array(
-			'cb'    			   => '<input type="checkbox" />',
-			'image' 			   => __( 'Featured Image', 'anva-post-types' ),
-			'title' 			   => __( 'Title', 'anva-post-types' ),
-			'gallery_cat' 		   => __( 'Categories', 'anva-post-types' ),
-			'date'  			   => __( 'Date', 'anva-post-types' )
+			'cb'       => '<input type="checkbox" />',
+			'image'    => __( 'Featured Image', 'anva-post-types' ),
+			'title'    => __( 'Title', 'anva-post-types' ),
+			'team_cat' => __( 'Positions', 'anva-post-types' ),
+			'date'     => __( 'Date', 'anva-post-types' )
 		);
 
 		return $columns;
@@ -125,19 +125,19 @@ class Anva_Post_Types_Gallery
 	public function register()
 	{
 		$labels = array(
-			'name'                 => __( 'Galleries',                   'anva-post-types' ),
-			'singular_name'        => __( 'Gallery',                     'anva-post-types' ),
-			'menu_name'            => __( 'Galleries',                   'anva-post-types' ),
-			'name_admin_bar'       => __( 'Gallery',                     'anva-post-types' ),
-			'add_new'              => __( 'Add New',                     'anva-post-types' ),
-			'add_new_item'         => __( 'Add New Gallery',             'anva-post-types' ),
-			'edit_item'            => __( 'Edit Gallery',                'anva-post-types' ),
-			'new_item'             => __( 'New Gallery',                 'anva-post-types' ),
-			'view_item'            => __( 'View Gallery',                'anva-post-types' ),
-			'search_items'         => __( 'Search Galleries',            'anva-post-types' ),
-			'not_found'            => __( 'No galleries found',          'anva-post-types' ),
-			'not_found_in_trash'   => __( 'No galleries found in trash', 'anva-post-types' ),
-			'all_items'            => __( 'All Galleries',               'anva-post-types' ),
+			'name'                 => __( 'Team',                   		'anva-post-types' ),
+			'singular_name'        => __( 'Team',                     		'anva-post-types' ),
+			'menu_name'            => __( 'Team',                   		'anva-post-types' ),
+			'name_admin_bar'       => __( 'Team',                     		'anva-post-types' ),
+			'add_new'              => __( 'Add New',                     	'anva-post-types' ),
+			'add_new_item'         => __( 'Add New Member',             	'anva-post-types' ),
+			'edit_item'            => __( 'Edit Member',                	'anva-post-types' ),
+			'new_item'             => __( 'New Member',                 	'anva-post-types' ),
+			'view_item'            => __( 'View Member',                	'anva-post-types' ),
+			'search_items'         => __( 'Search Team Members',            'anva-post-types' ),
+			'not_found'            => __( 'No team members found',          'anva-post-types' ),
+			'not_found_in_trash'   => __( 'No team members found in trash', 'anva-post-types' ),
+			'all_items'            => __( 'All Members',               		'anva-post-types' ),
 		);
 
 		$args = array(
@@ -151,14 +151,14 @@ class Anva_Post_Types_Gallery
 			'show_ui'              => true,
 			'show_in_menu'         => true,
 			'menu_position'        => 20,
-			'menu_icon'            => 'dashicons-format-gallery',
+			'menu_icon'            => 'dashicons-groups',
 			'can_export'           => true,
 			'delete_with_user'     => false,
 			'hierarchical'         => false,
-			'has_archive'          => 'galleries',
-			'query_var'            => 'gallery',
+			'has_archive'          => 'team',
+			'query_var'            => 'team',
 			'rewrite' 			   => array(
-				'slug'       	   => 'galleries',
+				'slug'       	   => 'team',
 				'with_front' 	   => false,
 				'pages'      	   => true,
 				'feeds'      	   => true,
@@ -180,20 +180,20 @@ class Anva_Post_Types_Gallery
 	public function taxonomy()
 	{
 		$labels = array(
-			'name'                 => __( 'Gallery Categories', 	'anva-post-types' ),
-			'singular_name'        => __( 'Gallery Category',   	'anva-post-types' ),
-			'menu_name'            => __( 'Categories',             'anva-post-types' ),
-			'name_admin_bar'       => __( 'Category',               'anva-post-types' ),
-			'search_items'         => __( 'Search Categories',      'anva-post-types' ),
-			'popular_items'        => __( 'Popular Categories',     'anva-post-types' ),
-			'all_items'            => __( 'All Categories',         'anva-post-types' ),
-			'edit_item'            => __( 'Edit Category',          'anva-post-types' ),
-			'view_item'            => __( 'View Category',          'anva-post-types' ),
-			'update_item'          => __( 'Update Category',        'anva-post-types' ),
-			'add_new_item'         => __( 'Add New Category',       'anva-post-types' ),
-			'new_item_name'        => __( 'New Category Name',      'anva-post-types' ),
-			'parent_item'          => __( 'Parent Category',        'anva-post-types' ),
-			'parent_item_colon'    => __( 'Parent Category:',       'anva-post-types' ),
+			'name'                 => __( 'Team Positions', 		'anva-post-types' ),
+			'singular_name'        => __( 'Team Position',   		'anva-post-types' ),
+			'menu_name'            => __( 'Positions',              'anva-post-types' ),
+			'name_admin_bar'       => __( 'Position',               'anva-post-types' ),
+			'search_items'         => __( 'Search Positions',       'anva-post-types' ),
+			'popular_items'        => __( 'Popular Positions',      'anva-post-types' ),
+			'all_items'            => __( 'All Positions',          'anva-post-types' ),
+			'edit_item'            => __( 'Edit Position',          'anva-post-types' ),
+			'view_item'            => __( 'View Position',          'anva-post-types' ),
+			'update_item'          => __( 'Update Position',        'anva-post-types' ),
+			'add_new_item'         => __( 'Add New Position',       'anva-post-types' ),
+			'new_item_name'        => __( 'New Position Name',      'anva-post-types' ),
+			'parent_item'          => __( 'Parent Position',        'anva-post-types' ),
+			'parent_item_colon'    => __( 'Parent Position:',       'anva-post-types' ),
 			'add_or_remove_items'  => NULL,
 			'not_found'            => NULL,
 		);
@@ -206,9 +206,9 @@ class Anva_Post_Types_Gallery
 			'show_tagcloud'        => true,
 			'show_admin_column'    => true,
 			'hierarchical'         => true,
-			'query_var'            => 'gallery_cat',
+			'query_var'            => 'team_cat',
 			'rewrite' 			   => array(
-				'slug'         	   => 'galleries-cat',
+				'slug'         	   => 'team-cat',
 				'with_front'   	   => false,
 				'hierarchical' 	   => true,
 				'ep_mask'      	   => EP_NONE

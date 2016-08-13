@@ -169,3 +169,26 @@ class Anva_Post_Types_Notices
     }
 
 }
+
+/**
+ * Anva post types check.
+ *
+ * @since  1.0.0
+ *
+ * @param  string $post_type
+ * @return boolean
+ */
+function anva_post_types_is_used( $post_type ) {
+
+    // Check if post types constant are defined
+    if ( ! defined( 'ANVA_POST_TYPES_USED' ) ) {
+        return false;
+    }
+
+    // Post types defined in theme level to be used.
+    $post_type_used = unserialize( ANVA_POST_TYPES_USED );
+
+    if ( in_array( $post_type, $post_type_used ) ) {
+        return true;
+    }
+}

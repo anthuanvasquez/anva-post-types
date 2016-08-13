@@ -41,9 +41,7 @@ class Anva_Post_Types_Portfolio
 	
 	private function __construct()
 	{
-		$post_type_used = unserialize( ANVA_POST_TYPES_USED );
-
-		if ( in_array( $this->post_type, $post_type_used ) ) {
+		if ( anva_post_types_is_used( $this->post_type ) ) {
 			add_action( 'init', array( $this, 'register' ) );
 			add_action( 'init', array( $this, 'taxonomy' ) );
 			add_action( 'manage_' . $this->post_type . '_posts_custom_column', array( $this, 'add_columns' ), 10, 2 );
