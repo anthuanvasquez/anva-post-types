@@ -6,23 +6,7 @@ Version: 1.0.0
 Author: Anthuan Vásquez
 Author URI: http://anthuanvasquez.net
 License: GPL2
-
-	Copyright 2016  Anva Framework
-
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License version 2,
-	as published by the Free Software Foundation.
-
-	You may NOT assume that you can use any other version of the GPL.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	The license for this software can likely be found here:
-	http://www.gnu.org/licenses/gpl-2.0.html
-
+Text Domain: anva-post-types
 */
 
 // If this file is called directly, abort.
@@ -32,8 +16,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 // Constants
 define( 'ANVA_POST_TYPES_PLUGIN_VERSION', '1.0.0' );
-define( 'ANVA_POST_TYPES_PLUGIN_DIR', dirname( __FILE__ ) );
-define( 'ANVA_POST_TYPES_PLUGIN_URI', plugins_url( '' , __FILE__ ) );
+define( 'ANVA_POST_TYPES_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'ANVA_POST_TYPES_PLUGIN_URI', plugin_dir_url( __FILE__ ) );
 
 /**
  * Init post types plugin.
@@ -52,11 +36,30 @@ function anva_post_types_init() {
 	if ( $notices->do_stop() ) {
 		return;
 	}
+
+	// Chech if post types used is defined
+	if ( ! defined( 'ANVA_POST_TYPES_USED' ) ) {
+		return;
+	}
+
+	// General
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/general.php' );	
 	
-	// Include post types
+	// Load post types dependencies
 	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/portfolio-post-type.php' );	
 	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/gallery-post-type.php'   );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/event-post-type.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/team-post-type.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/client-post-type.php' );
 	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/slideshow-post-type.php' );
+
+	// Instance post types classes
+	$portfolio = Anva_Post_Types_Portfolio::get_instance();
+	$gallery   = Anva_Post_Types_Gallery::get_instance();
+	$event     = Anva_Post_Types_Event::get_instance();
+	$team      = Anva_Post_Types_Team::get_instance();
+	$team      = Anva_Post_Types_Client::get_instance();
+	$slideshow = Anva_Post_Types_Slideshow::get_instance();
 	
 }
 add_action( 'after_setup_theme', 'anva_post_types_init' );
