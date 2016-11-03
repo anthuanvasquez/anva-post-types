@@ -58,7 +58,7 @@ function anva_post_types_init() {
 	$gallery   = Anva_Post_Types_Gallery::get_instance();
 	$event     = Anva_Post_Types_Event::get_instance();
 	$team      = Anva_Post_Types_Team::get_instance();
-	$team      = Anva_Post_Types_Client::get_instance();
+	$client    = Anva_Post_Types_Client::get_instance();
 	$slideshow = Anva_Post_Types_Slideshow::get_instance();
 	
 }
