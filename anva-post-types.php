@@ -51,6 +51,7 @@ function anva_post_types_init() {
 	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/event-post-type.php' );
 	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/team-post-type.php' );
 	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/client-post-type.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/service-post-type.php' );
 	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/slideshow-post-type.php' );
 
 	// Instance post types classes
@@ -59,6 +60,7 @@ function anva_post_types_init() {
 	$event     = Anva_Post_Types_Event::get_instance();
 	$team      = Anva_Post_Types_Team::get_instance();
 	$client    = Anva_Post_Types_Client::get_instance();
+	$service   = Anva_Post_Types_Service::get_instance();
 	$slideshow = Anva_Post_Types_Slideshow::get_instance();
 	
 }
