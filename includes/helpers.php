@@ -77,7 +77,7 @@ class Anva_Post_Types_Notices
         if ( $this->error ) {
 
             $theme = wp_get_theme( get_template() );
-            $changelog = '<a href="http://anthuanvasquez.net/anva/changelog/?theme=' . get_template() . '" target="_blank">' . esc_html__( 'theme\'s changelog', 'anva-post-type' ) . '</a>';
+            $changelog = '<a href="http://anthuanvasquez.net/anva/changelog/?theme=' . get_template() . '" target="_blank">' . esc_html__( 'theme\'s changelog', 'anva-post-types' ) . '</a>';
 
             foreach ( $this->error as $error ) {
                 if ( ! get_user_meta( $current_user->ID, 'anva-nag-'.$error, true ) ) {
