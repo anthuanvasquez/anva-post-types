@@ -77,7 +77,7 @@ class Anva_Post_Types_Notices
         if ( $this->error ) {
 
             $theme = wp_get_theme( get_template() );
-            $changelog = '<a href="http://anthuanvasquez.net/anva/changelog/?theme=' . get_template() . '" target="_blank">' . esc_html__( 'theme\'s changelog', 'anva-post-types' ) . '</a>';
+            $changelog = '<a href="https://themes.anthuanvasquez.net/anva/changelog/?theme=' . get_template() . '" target="_blank">' . esc_html__( 'theme\'s changelog', 'anva-post-types' ) . '</a>';
 
             foreach ( $this->error as $error ) {
                 if ( ! get_user_meta( $current_user->ID, 'anva-nag-'.$error, true ) ) {
@@ -171,6 +171,16 @@ class Anva_Post_Types_Notices
 }
 
 /**
+ * Anva post types list.
+ * 
+ * @return array
+ */
+function anva_post_types_list() {
+    $post_types = array();
+    return apply_filters( 'anva_post_types_list', $post_types );
+}
+
+/**
  * Anva post types check.
  *
  * @since  1.0.0
@@ -178,17 +188,32 @@ class Anva_Post_Types_Notices
  * @param  string $post_type
  * @return boolean
  */
-function anva_post_types_is_used( $post_type ) {
+function anva_post_types_is_active( $post_type ) {
 
-    // Check if post types constant are defined
-    if ( ! defined( 'ANVA_POST_TYPES_USED' ) ) {
+    $post_types = anva_post_types_list();
+
+    // Check if there is post types to register.
+    if ( empty( $post_types ) ) {
         return false;
     }
 
-    // Post types defined in theme level to be used.
-    $post_type_used = unserialize( ANVA_POST_TYPES_USED );
-
-    if ( in_array( $post_type, $post_type_used ) ) {
+    if ( in_array( $post_type, $post_types ) ) {
         return true;
     }
+}
+
+function anva_get_post_id_by_meta( $key, $value ) {
+    global $wpdb;
+    
+    $meta = $wpdb->get_results( "SELECT * FROM `" . $wpdb->postmeta . "` WHERE meta_key='" . esc_sql( $key ) . "' AND meta_value='" . esc_sql( $value ) . "'" );
+    
+    if ( is_array( $meta ) && ! empty( $meta ) && isset( $meta[0] ) ) {
+        $meta = $meta[0];
+    }
+    
+    if ( is_object( $meta ) ) {
+        return $meta->post_id;
+    }
+    
+    return false;
 }

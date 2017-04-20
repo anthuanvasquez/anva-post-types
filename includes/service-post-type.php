@@ -40,7 +40,7 @@ class Anva_Post_Types_Service
     
     private function __construct()
     {
-        if ( anva_post_types_is_used( $this->post_type ) ) {
+        if ( anva_post_types_is_active( $this->post_type ) ) {
             add_action( 'init', array( $this, 'register' ) );
             add_action( 'init', array( $this, 'taxonomy' ) );
             add_action( 'manage_' . $this->post_type . '_posts_custom_column', array( $this, 'add_columns' ), 10, 2 );
