@@ -78,7 +78,7 @@ class Anva_Post_Types_anime
                 
                 break;
 
-            case 'anime_genre':
+            case 'anime_type':
                 
                 $terms = get_the_terms( $post_id, $this->taxonomies[0] );
 
@@ -100,7 +100,7 @@ class Anva_Post_Types_anime
 
                 break;
 
-            case 'anime_type':
+            case 'anime_genre':
                 $terms = get_the_terms( $post_id, $this->taxonomies[1] );
 
                 if ( ! empty( $terms ) ) {

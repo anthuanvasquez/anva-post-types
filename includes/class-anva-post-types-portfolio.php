@@ -181,7 +181,7 @@ class Anva_Post_Types_Portfolio
 				'feeds'      	  => true,
 				'ep_mask'    	  => EP_PERMALINK,
 			),
-			'supports' 			  => array( 'title', 'editor', 'thumbnail' ),
+			'supports' 			  => array( 'title', 'editor', 'thumbnail', 'comments' ),
 		);
 
 		register_post_type( $this->post_type, $args );
