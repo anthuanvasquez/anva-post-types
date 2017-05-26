@@ -172,7 +172,7 @@ class Anva_Post_Types_Slideshow
 			'exclude_from_search' => true,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
-			'menu_position'       => 20,
+			'menu_position'       => 25,
 			'menu_icon'           => 'dashicons-images-alt2',
 			'can_export'          => true,
 			'delete_with_user'    => false,

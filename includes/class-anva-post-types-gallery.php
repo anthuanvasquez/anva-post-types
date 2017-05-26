@@ -1,13 +1,17 @@
 <?php
 
-class Anva_Post_Types_Gallery
-{
+/**
+ * Galleries and photos albums.
+ *
+ * @since 1.0.0
+ */
+class Anva_Post_Types_Gallery {
 	/**
-     * A single instance of this class.
-     *
-     * @since 1.0.0
-     */
-    private static $instance = NULL;
+	 * A single instance of this class.
+	 *
+	 * @since 1.0.0
+	 */
+	private static $instance = NULL;
 	
 	/**
 	 * Post type slug.
@@ -21,25 +25,23 @@ class Anva_Post_Types_Gallery
 	 * 
 	 * @var string
 	 */
-	private $taxonomy = 'gallery_cat';
+	private $taxonomy = 'gallery_album';
 
 	/**
-     * Creates or returns an instance of this class.
-     *
-     * @since 1.0.0
-     * @return A single instance of this class.
-     */
-    public static function get_instance()
-    {
-        if ( self::$instance == NULL ) {
-            self::$instance = new self;
-        }
+	 * Creates or returns an instance of this class.
+	 *
+	 * @since 1.0.0
+	 * @return A single instance of this class.
+	 */
+	public static function get_instance() {
+		if ( self::$instance == null ) {
+			self::$instance = new self;
+		}
 
-        return self::$instance;
-    }
+		return self::$instance;
+	}
 	
-	private function __construct()
-	{
+	private function __construct() {
 		if ( anva_post_types_is_active( $this->post_type ) ) {
 			add_action( 'init', array( $this, 'register' ) );
 			add_action( 'init', array( $this, 'taxonomy' ) );
@@ -57,8 +59,7 @@ class Anva_Post_Types_Gallery
 	 * @param  integer $post_id
 	 * @return void
 	 */
-	public function add_columns( $column, $post_id )
-	{	
+	public function add_columns( $column, $post_id ) {
 		switch ( $column ) {
 			
 			case 'image':
@@ -71,7 +72,7 @@ class Anva_Post_Types_Gallery
 				
 				break;
 
-			case 'gallery_cat':
+			case 'gallery_album':
 
 				$terms = get_the_terms( $post_id, $this->taxonomy );
 
@@ -88,12 +89,11 @@ class Anva_Post_Types_Gallery
 
 					echo join( ', ', $output );
 				} else {
-					_e( 'No Gallery Categories', 'anva-post-types' );
+					_e( 'No Albums Found', 'anva-post-types' );
 				}
 
 				break;
 		}
-		
 	}
 
 	/**
@@ -103,14 +103,13 @@ class Anva_Post_Types_Gallery
 	 * @param  array $columns
 	 * @return array $columns
 	 */
-	public function columns( $columns )
-	{
+	public function columns( $columns ) {
 		$columns = array(
-			'cb'    			   => '<input type="checkbox" />',
-			'image' 			   => __( 'Featured Image', 'anva-post-types' ),
-			'title' 			   => __( 'Title', 'anva-post-types' ),
-			'gallery_cat' 		   => __( 'Categories', 'anva-post-types' ),
-			'date'  			   => __( 'Date', 'anva-post-types' )
+			'cb'            => '<input type="checkbox" />',
+			'image'         => __( 'Featured Image', 'anva-post-types' ),
+			'title'         => __( 'Title', 'anva-post-types' ),
+			'gallery_album' => __( 'Albums', 'anva-post-types' ),
+			'date'          => __( 'Date', 'anva-post-types' ),
 		);
 
 		return $columns;
@@ -122,8 +121,7 @@ class Anva_Post_Types_Gallery
 	 * @since  1.0.0
 	 * @return void
 	 */
-	public function register()
-	{
+	public function register() {
 		$labels = array(
 			'name'                 => __( 'Galleries',                   'anva-post-types' ),
 			'singular_name'        => __( 'Gallery',                     'anva-post-types' ),
@@ -150,7 +148,7 @@ class Anva_Post_Types_Gallery
 			'exclude_from_search'  => false,
 			'show_ui'              => true,
 			'show_in_menu'         => true,
-			'menu_position'        => 20,
+			'menu_position'        => 25,
 			'menu_icon'            => 'dashicons-format-gallery',
 			'can_export'           => true,
 			'delete_with_user'     => false,
@@ -168,7 +166,6 @@ class Anva_Post_Types_Gallery
 		);
 
 		register_post_type( $this->post_type, $args );
-
 	}
 
 	/**
@@ -177,25 +174,24 @@ class Anva_Post_Types_Gallery
 	 * @since  1.0.0
 	 * @return void
 	 */
-	public function taxonomy()
-	{
+	public function taxonomy() {
 		$labels = array(
-			'name'                 => __( 'Gallery Categories', 	'anva-post-types' ),
-			'singular_name'        => __( 'Gallery Category',   	'anva-post-types' ),
-			'menu_name'            => __( 'Categories',             'anva-post-types' ),
-			'name_admin_bar'       => __( 'Category',               'anva-post-types' ),
-			'search_items'         => __( 'Search Categories',      'anva-post-types' ),
-			'popular_items'        => __( 'Popular Categories',     'anva-post-types' ),
-			'all_items'            => __( 'All Categories',         'anva-post-types' ),
-			'edit_item'            => __( 'Edit Category',          'anva-post-types' ),
-			'view_item'            => __( 'View Category',          'anva-post-types' ),
-			'update_item'          => __( 'Update Category',        'anva-post-types' ),
-			'add_new_item'         => __( 'Add New Category',       'anva-post-types' ),
-			'new_item_name'        => __( 'New Category Name',      'anva-post-types' ),
-			'parent_item'          => __( 'Parent Category',        'anva-post-types' ),
-			'parent_item_colon'    => __( 'Parent Category:',       'anva-post-types' ),
-			'add_or_remove_items'  => NULL,
-			'not_found'            => NULL,
+			'name'                 => __( 'Gallery Albumns', 	 'anva-post-types' ),
+			'singular_name'        => __( 'Gallery Album',   	 'anva-post-types' ),
+			'menu_name'            => __( 'Albums',              'anva-post-types' ),
+			'name_admin_bar'       => __( 'Album',               'anva-post-types' ),
+			'search_items'         => __( 'Search Albums',       'anva-post-types' ),
+			'popular_items'        => __( 'Popular Albums',      'anva-post-types' ),
+			'all_items'            => __( 'All Albums',          'anva-post-types' ),
+			'edit_item'            => __( 'Edit Album',          'anva-post-types' ),
+			'view_item'            => __( 'View Album',          'anva-post-types' ),
+			'update_item'          => __( 'Update Album',        'anva-post-types' ),
+			'add_new_item'         => __( 'Add New Album',       'anva-post-types' ),
+			'new_item_name'        => __( 'New Album Name',      'anva-post-types' ),
+			'parent_item'          => __( 'Parent Album',        'anva-post-types' ),
+			'parent_item_colon'    => __( 'Parent Album:',       'anva-post-types' ),
+			'add_or_remove_items'  => null,
+			'not_found'            => null,
 		);
 
 		$args = array(
@@ -206,9 +202,9 @@ class Anva_Post_Types_Gallery
 			'show_tagcloud'        => true,
 			'show_admin_column'    => true,
 			'hierarchical'         => true,
-			'query_var'            => 'gallery_cat',
+			'query_var'            => 'gallery_album',
 			'rewrite' 			   => array(
-				'slug'         	   => 'galleries-cat',
+				'slug'         	   => 'galleries-album',
 				'with_front'   	   => false,
 				'hierarchical' 	   => true,
 				'ep_mask'      	   => EP_NONE
@@ -220,7 +216,5 @@ class Anva_Post_Types_Gallery
 			$this->post_type,
 			$args
 		);
-
 	}
-
 }

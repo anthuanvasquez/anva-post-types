@@ -150,7 +150,7 @@ class Anva_Post_Types_Team
 			'exclude_from_search'  => false,
 			'show_ui'              => true,
 			'show_in_menu'         => true,
-			'menu_position'        => 20,
+			'menu_position'        => 25,
 			'menu_icon'            => 'dashicons-groups',
 			'can_export'           => true,
 			'delete_with_user'     => false,
