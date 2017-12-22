@@ -1,13 +1,17 @@
 <?php
 
-class Anva_Post_Types_Client
-{
+/**
+ * Register custom post type and taxonomy to create Clients.
+ *
+ * @since 1.0.0
+ */
+class Anva_Post_Types_Client {
 	/**
-     * A single instance of this class.
-     *
-     * @since 1.0.0
-     */
-    private static $instance = NULL;
+	 * A single instance of this class.
+	 *
+	 * @since 1.0.0
+	 */
+	private static $instance = NULL;
 	
 	/**
 	 * Post type slug.
@@ -24,23 +28,21 @@ class Anva_Post_Types_Client
 	private $taxonomy = 'client_cat';
 
 	/**
-     * Creates or returns an instance of this class.
-     *
-     * @since 1.0.0
-     * @return A single instance of this class.
-     */
-    public static function get_instance()
-    {
-        if ( self::$instance == NULL ) {
-            self::$instance = new self;
-        }
+	 * Creates or returns an instance of this class.
+	 *
+	 * @since 1.0.0
+	 * @return A single instance of this class.
+	 */
+	public static function get_instance() {
+		if ( self::$instance == NULL ) {
+			self::$instance = new self;
+		}
 
-        return self::$instance;
-    }
+		return self::$instance;
+	}
 	
-	private function __construct()
-	{
-		if ( anva_post_types_is_used( $this->post_type ) ) {
+	private function __construct() {
+		if ( anva_post_types_is_active( $this->post_type ) ) {
 			add_action( 'init', array( $this, 'register' ) );
 			add_action( 'init', array( $this, 'taxonomy' ) );
 			add_action( 'manage_' . $this->post_type . '_posts_custom_column', array( $this, 'add_columns' ), 10, 2 );
@@ -57,8 +59,7 @@ class Anva_Post_Types_Client
 	 * @param  integer $post_id
 	 * @return void
 	 */
-	public function add_columns( $column, $post_id )
-	{	
+	public function add_columns( $column, $post_id ) {
 		switch ( $column ) {
 			
 			case 'image':
@@ -71,7 +72,7 @@ class Anva_Post_Types_Client
 				
 				break;
 
-			case 'client_cat':
+			case $this->taxonomy:
 
 				$terms = get_the_terms( $post_id, $this->taxonomy );
 
@@ -93,7 +94,6 @@ class Anva_Post_Types_Client
 
 				break;
 		}
-		
 	}
 
 	/**
@@ -103,14 +103,13 @@ class Anva_Post_Types_Client
 	 * @param  array $columns
 	 * @return array $columns
 	 */
-	public function columns( $columns )
-	{
+	public function columns( $columns ) {
 		$columns = array(
 			'cb'         => '<input type="checkbox" />',
 			'image'      => __( 'Featured Image', 'anva-post-types' ),
 			'title'      => __( 'Title', 'anva-post-types' ),
 			'client_cat' => __( 'Categories', 'anva-post-types' ),
-			'date'       => __( 'Date', 'anva-post-types' )
+			'date'       => __( 'Date', 'anva-post-types' ),
 		);
 
 		return $columns;
@@ -122,8 +121,7 @@ class Anva_Post_Types_Client
 	 * @since  1.0.0
 	 * @return void
 	 */
-	public function register()
-	{
+	public function register() {
 		$labels = array(
 			'name'                 => __( 'Clients',                   		'anva-post-types' ),
 			'singular_name'        => __( 'Client',                     	'anva-post-types' ),
@@ -150,7 +148,7 @@ class Anva_Post_Types_Client
 			'exclude_from_search' => true,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
-			'menu_position'       => 20,
+			'menu_position'       => 25,
 			'menu_icon'           => 'dashicons-businessman',
 			'can_export'          => true,
 			'delete_with_user'    => false,
@@ -161,7 +159,6 @@ class Anva_Post_Types_Client
 		);
 
 		register_post_type( $this->post_type, $args );
-
 	}
 
 	/**
@@ -170,12 +167,11 @@ class Anva_Post_Types_Client
 	 * @since  1.0.0
 	 * @return void
 	 */
-	public function taxonomy()
-	{
+	public function taxonomy() {
 		$labels = array(
-			'name'                 => __( 'Categories', 		    'anva-post-types' ),
-			'singular_name'        => __( 'Category',   		    'anva-post-types' ),
-			'menu_name'            => __( 'Categories',            'anva-post-types' ),
+			'name'                 => __( 'Client Categories', 		'anva-post-types' ),
+			'singular_name'        => __( 'Client Category',   		'anva-post-types' ),
+			'menu_name'            => __( 'Categories',             'anva-post-types' ),
 			'name_admin_bar'       => __( 'Categories',             'anva-post-types' ),
 			'search_items'         => __( 'Search Categories',      'anva-post-types' ),
 			'popular_items'        => __( 'Popular Categories',     'anva-post-types' ),
@@ -187,12 +183,12 @@ class Anva_Post_Types_Client
 			'new_item_name'        => __( 'New Category Name',      'anva-post-types' ),
 			'parent_item'          => __( 'Parent Category',        'anva-post-types' ),
 			'parent_item_colon'    => __( 'Parent Category:',       'anva-post-types' ),
-			'add_or_remove_items'  => NULL,
-			'not_found'            => NULL,
+			'add_or_remove_items'  => null,
+			'not_found'            => null,
 		);
 
 		$args = array(
-			'labels'				=> $labels,	
+			'labels'				=> $labels,
 			'public'            	=> false,
 			'show_ui'           	=> true,
 			'show_in_nav_menus' 	=> false,
@@ -207,7 +203,5 @@ class Anva_Post_Types_Client
 			$this->post_type,
 			$args
 		);
-
 	}
-
 }

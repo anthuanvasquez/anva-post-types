@@ -14,53 +14,57 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-// Constants
+// Constants.
 define( 'ANVA_POST_TYPES_PLUGIN_VERSION', '1.0.0' );
 define( 'ANVA_POST_TYPES_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ANVA_POST_TYPES_PLUGIN_URI', plugin_dir_url( __FILE__ ) );
 
 /**
  * Init post types plugin.
- * 
+ *
  * @since 1.0.0
  */
 function anva_post_types_init() {
 
-	// Include helpers
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/helpers.php' );
-
-	// Error handling
-	$notices = Anva_Post_Types_Notices::get_instance();
-
-	// Stop plugin from running
-	if ( $notices->do_stop() ) {
+	// General functions.
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/general.php' );
+	
+	// Check is anvaframework is running.
+	if ( ! defined( 'ANVA_FRAMEWORK_VERSION' ) ) {
+		add_action( 'admin_notices', 'anva_post_types_warning' );
+		add_action( 'admin_init', 'anva_post_types_disable_nag' );
 		return;
 	}
 
-	// Chech if post types used is defined
-	if ( ! defined( 'ANVA_POST_TYPES_USED' ) ) {
+	// Chech if post types list is defined.
+	$post_types = anva_post_types_list();
+
+	if ( empty( $post_types ) ) {
 		return;
 	}
 
-	// General
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/general.php' );	
-	
-	// Load post types dependencies
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/portfolio-post-type.php' );	
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/gallery-post-type.php'   );
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/event-post-type.php' );
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/team-post-type.php' );
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/client-post-type.php' );
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/slideshow-post-type.php' );
+	// Load post types dependencies.
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-portfolio.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-gallery.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-slideshow.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-team.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-testimonial.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-event.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-client.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-service.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-anime.php' );
 
-	// Instance post types classes
-	$portfolio = Anva_Post_Types_Portfolio::get_instance();
-	$gallery   = Anva_Post_Types_Gallery::get_instance();
-	$event     = Anva_Post_Types_Event::get_instance();
-	$team      = Anva_Post_Types_Team::get_instance();
-	$team      = Anva_Post_Types_Client::get_instance();
-	$slideshow = Anva_Post_Types_Slideshow::get_instance();
-	
+	// Instance post types classes.
+	Anva_Post_Types_Portfolio::get_instance();
+	Anva_Post_Types_Gallery::get_instance();
+	Anva_Post_Types_Slideshow::get_instance();
+	Anva_Post_Types_Team::get_instance();
+	Anva_Post_Types_Testimonial::get_instance();
+	Anva_Post_Types_Client::get_instance();
+	Anva_Post_Types_Service::get_instance();
+	Anva_Post_Types_Event::get_instance();
+	Anva_Post_Types_Anime::get_instance();
+
 }
 add_action( 'after_setup_theme', 'anva_post_types_init' );
 

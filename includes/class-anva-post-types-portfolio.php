@@ -41,7 +41,7 @@ class Anva_Post_Types_Portfolio
 	
 	private function __construct()
 	{
-		if ( anva_post_types_is_used( $this->post_type ) ) {
+		if ( anva_post_types_is_active( $this->post_type ) ) {
 			add_action( 'init', array( $this, 'register' ) );
 			add_action( 'init', array( $this, 'taxonomy' ) );
 			add_action( 'manage_' . $this->post_type . '_posts_custom_column', array( $this, 'add_columns' ), 10, 2 );
@@ -167,7 +167,7 @@ class Anva_Post_Types_Portfolio
 			'exclude_from_search' => false,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
-			'menu_position'       => 20,
+			'menu_position'       => 25,
 			'menu_icon'           => 'dashicons-portfolio',
 			'can_export'          => true,
 			'delete_with_user'    => false,
@@ -181,7 +181,7 @@ class Anva_Post_Types_Portfolio
 				'feeds'      	  => true,
 				'ep_mask'    	  => EP_PERMALINK,
 			),
-			'supports' 			  => array( 'title', 'editor', 'thumbnail' ),
+			'supports' 			  => array( 'title', 'editor', 'thumbnail', 'comments' ),
 		);
 
 		register_post_type( $this->post_type, $args );
