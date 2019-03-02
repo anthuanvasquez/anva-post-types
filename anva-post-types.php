@@ -29,13 +29,6 @@ function anva_post_types_init() {
 	// General functions.
 	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/general.php' );
 
-	// Check is anvaframework is running.
-	if ( ! defined( 'ANVA_FRAMEWORK_VERSION' ) ) {
-		add_action( 'admin_notices', 'anva_post_types_warning' );
-		add_action( 'admin_init', 'anva_post_types_disable_nag' );
-		return;
-	}
-
 	// Chech if post types list is defined.
 	$post_types = anva_post_types_list();
 
