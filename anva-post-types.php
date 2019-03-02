@@ -28,13 +28,6 @@ function anva_post_types_init() {
 
 	// General functions.
 	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/general.php' );
-	
-	// Check is anvaframework is running.
-	if ( ! defined( 'ANVA_FRAMEWORK_VERSION' ) ) {
-		add_action( 'admin_notices', 'anva_post_types_warning' );
-		add_action( 'admin_init', 'anva_post_types_disable_nag' );
-		return;
-	}
 
 	// Chech if post types list is defined.
 	$post_types = anva_post_types_list();
@@ -44,15 +37,15 @@ function anva_post_types_init() {
 	}
 
 	// Load post types dependencies.
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-portfolio.php' );
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-gallery.php' );
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-slideshow.php' );
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-team.php' );
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-testimonial.php' );
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-event.php' );
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-client.php' );
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-service.php' );
-	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/class-anva-post-types-anime.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/post-types/class-anva-post-types-portfolio.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/post-types/class-anva-post-types-gallery.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/post-types/class-anva-post-types-slideshow.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/post-types/class-anva-post-types-team.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/post-types/class-anva-post-types-testimonial.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/post-types/class-anva-post-types-event.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/post-types/class-anva-post-types-client.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/post-types/class-anva-post-types-service.php' );
+	include_once( ANVA_POST_TYPES_PLUGIN_DIR . '/includes/post-types/class-anva-post-types-anime.php' );
 
 	// Instance post types classes.
 	Anva_Post_Types_Portfolio::get_instance();
@@ -78,4 +71,3 @@ function anva_post_types_rules() {
 }
 register_activation_hook( __FILE__, 'anva_post_types_rules' );
 register_deactivation_hook( __FILE__, 'anva_post_types_rules' );
-
